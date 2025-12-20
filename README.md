@@ -1,22 +1,23 @@
 <div align="center">
 
-<img width="1200" height="475" alt="Visitor & Parcel Management System Banner" 
+<img width="1200" height="475" alt="Visitor & Parcel Management System Banner"
 src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 
 <h1>Visitor & Parcel Management System</h1>
 
 <p>
-A smart web application for gated communities to manage visitor entry and parcel deliveries  
-with real-time notifications, role-based access, and secure workflows.
+A modern web application for gated communities to manage visitor entry and parcel deliveries  
+with role-based access, real-time updates, and structured workflows.
 </p>
 
 <p>
-<b>Built with AI Studio</b> • Designed for Internship Capstone Project
+<b>Internship Capstone Project • Web Application</b>
 </p>
 
-<a href="#-project-overview">View Project</a> •
+<a href="#-project-overview">Project Overview</a> •
 <a href="#-features">Features</a> •
 <a href="#-tech-stack">Tech Stack</a> •
+<a href="#-workflow">Workflow</a> •
 <a href="#-getting-started">Getting Started</a>
 
 </div>
@@ -25,47 +26,89 @@ with real-time notifications, role-based access, and secure workflows.
 
 ## 📌 Project Overview
 
-The **Visitor & Parcel Management System** is a web-based application designed for **gated communities** to digitally manage:
+The **Visitor & Parcel Management System** is a web-based solution designed for **gated communities** to digitally manage:
 
-- Visitor entry approvals
-- Parcel delivery acknowledgements
-- Role-based dashboards for Security and Residents
-- Real-time notifications for faster response
+- Visitor entry requests
+- Parcel delivery notifications
+- Resident approvals and acknowledgements
+- Secure role-based dashboards
 
-The system replaces traditional manual registers with a **secure, efficient, and user-friendly digital solution**.
+The system replaces traditional manual registers with a **secure, efficient, and user-friendly digital workflow**.
 
 ---
 
 ## 👥 User Roles
 
 ### 🔐 Security Guard
-- Log visitor entry
-- Log parcel deliveries
-- Update entry/exit status
+- Log visitor entry details
+- Log parcel delivery information
+- Update visitor entry and exit status
 
 ### 🏠 Resident
-- Approve or reject visitors
+- Approve or reject visitor requests
 - Acknowledge and collect parcels
-- View visitor & parcel history
+- View visitor and parcel history
 
 ### 🛠️ Admin (Optional)
-- Monitor overall activity
+- Monitor overall system activity
 - View analytics and reports
 
 ---
 
 ## ✨ Features
 
-- ✅ Role-based authentication (Resident / Security / Admin)
-- ✅ Visitor approval workflow
+- ✅ Role-based authentication
+- ✅ Visitor approval system
 - ✅ Parcel delivery tracking
-- ✅ Real-time notifications
-- ✅ Status-based lifecycle management
-- ✅ Clean and modern UI
-- ✅ Scalable architecture design
+- ✅ Status-based workflow management
+- ✅ Clean and responsive UI
+- ✅ Secure and scalable design
+- ✅ Easy-to-use dashboards
 
 ---
 
 ## 🔄 Workflow
 
-### Visitor Flow
+### Visitor Workflow
+
+### Parcel Workflow
+
+All status transitions follow predefined rules to ensure data consistency and security.
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- Angular
+- TypeScript
+- Tailwind CSS
+
+### Backend
+- Node.js
+- Express.js
+- JWT Authentication
+- Socket.IO (Real-time communication)
+
+### Database
+- MySQL
+
+### DevOps & Tools
+- Git & GitHub
+- Docker (for deployment)
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js (v18 or above)
+- Git
+- MySQL
+
+### Installation
+```bash
+git clone <repository-url>
+cd visitor-parcel-management-system
+npm install
+npm start
