@@ -1,0 +1,102 @@
+/* Global Theme Updates */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+:root {
+  --primary-color: #3f51b5;
+  --accent-color: #ff4081;
+  --warn-color: #f44336;
+  --bg-color: #f5f7fa;
+  --card-bg: #ffffff;
+}
+
+body {
+  margin: 0;
+  font-family: 'Roboto', "Helvetica Neue", sans-serif;
+  background-color: var(--bg-color);
+  color: #333;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+/* Status Chips */
+.status-chip {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.status-waiting {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-approved {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-rejected {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.status-entered {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.status-exited {
+  background-color: #e2e3e5;
+  color: #383d41;
+}
+
+.status-received {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-acknowledged {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-collected {
+  background-color: #d6d8d9;
+  color: #1b1e21;
+}
+
+/* Dashboard Layouts */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.mat-mdc-card {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Navbar */
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  margin-bottom: 20px;
+}
