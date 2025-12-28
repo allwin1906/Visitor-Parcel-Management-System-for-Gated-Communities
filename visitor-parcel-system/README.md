@@ -8,45 +8,35 @@ A full-stack application for managing visitors and parcels in gated communities.
 - **Database**: MySQL
 - **DevOps**: Docker, Docker Compose
 
-## How to Run (Local without Docker)
-1. **Prerequisites**: Node.js installed.
-2. **Install Dependencies** (I've started this for you):
-   ```bash
-   cd backend && npm install
-   cd frontend && npm install
-   ```
-3. **Start the App**:
-   Run the `start-local.bat` file in the root directory.
-   - Backend: http://localhost:4000
-   - Frontend: http://localhost:4200
+## How to Start the Application
+**Option 1: The Easy Way (Windows)**
+1.  Navigate to the project folder.
+2.  Double-click **`start-local.bat`**.
+    *   This will automatically install dependencies and launch both the Backend (Port 4000) and Frontend (Port 4200).
+    *   The application will open in your browser automatically.
 
-## How to Run (with Docker)
-1. Ensure Docker Desktop is installed and running.
-2. Run:
-   ```bash
-   docker-compose up --build
-   ```
+**Option 2: Manual Start**
+1.  **Backend**:
+    ```bash
+    cd backend
+    npm install
+    npm run dev
+    ```
+2.  **Frontend**:
+    ```bash
+    cd frontend
+    npm install
+    npm start
+    ```
 
-## Sample Credentials
-Since the database starts empty, you can register a new user via the API or use the provided registration endpoint in Postman/curl (or implement a UI reg flow, but currently UI has Login).
+## Pre-Configured Login Credentials
+The system comes with the following users pre-created (seeded):
 
-**To create a Security Admin (via Curl/Postman):**
-```bash
-curl -X POST http://localhost:4000/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"name": "Security Guard", "email": "security@example.com", "password": "password", "role": "Security"}'
-```
-
-**To create a Resident:**
-```bash
-curl -X POST http://localhost:4000/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"name": "John Doe", "email": "john@example.com", "password": "password", "role": "Resident"}'
-```
-
-**Login in UI:**
-- **Security**: `security@example.com` / `password`
-- **Resident**: `john@example.com` / `password`
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **Security Guard** | `security@example.com` | `password` |
+| **Resident** | `john@example.com` | `password` |
+| **Admin** | `admin@example.com` | `password` |
 
 ## API Endpoints
 
@@ -59,8 +49,9 @@ curl -X POST http://localhost:4000/auth/register \
 - `GET /items?residentId=X` - View items
 - `PATCH /items/:id/status` - Update status (Resident can Approve/Reject, Security can Enter/Exit)
 
-## Features
-- Role-based Dashboard (Resident vs Security)
-- JWT Authentication
-- Real-time notifications via Socket.IO
-- Persistent MySQL Database
+## Features Implemented
+- **Premium UI/UX**: Glassmorphism design with responsive gradients and animations.
+- **Visitor Management**: Log visitors with Name, Phone, and Purpose. Residents can approve/reject.
+- **Parcel Tracking**: Log packages with Courier Name and Tracking ID. Residents can acknowledge receipt.
+- **Role-Based Access**: Specialized dashboards for Security, Residents, and Admins.
+- **Real-time Stats**: Admin dashboard showing daily stats.

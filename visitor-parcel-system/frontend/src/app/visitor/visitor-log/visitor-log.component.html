@@ -1,0 +1,72 @@
+<div class="container fade-in">
+    <mat-card class="log-card">
+        <mat-card-header>
+            <div mat-card-avatar class="header-icon">
+                <mat-icon>person_add</mat-icon>
+            </div>
+            <mat-card-title>Visitor Entry Log</mat-card-title>
+            <mat-card-subtitle>Record visitor details for security logging</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <form [formGroup]="visitorForm" (ngSubmit)="onSubmit()">
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Visitor Name</mat-label>
+                    <mat-icon matPrefix>badge</mat-icon>
+                    <input matInput formControlName="name" placeholder="John Doe">
+                    <mat-error *ngIf="visitorForm.get('name')?.hasError('required')">Name is required</mat-error>
+                </mat-form-field>
+
+                <div formGroupName="contactWrapper">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Phone Number</mat-label>
+                        <mat-icon matPrefix>phone</mat-icon>
+                        <input matInput formControlName="phone" placeholder="9876543210">
+                        <mat-error *ngIf="visitorForm.get('contactWrapper.phone')?.hasError('required')">Phone is
+                            required</mat-error>
+                        <mat-error *ngIf="visitorForm.get('contactWrapper.phone')?.hasError('pattern')">Invalid phone
+                            number</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="row">
+                    <mat-form-field appearance="outline" class="half-width">
+                        <mat-label>Resident (Unit)</mat-label>
+                        <mat-icon matPrefix>home</mat-icon>
+                        <mat-select formControlName="residentId">
+                            <mat-option *ngFor="let r of residents" [value]="r.id">{{ r.name }} ({{ r.email
+                                }})</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="visitorForm.get('residentId')?.hasError('required')">Resident is
+                            required</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="half-width">
+                        <mat-label>Purpose</mat-label>
+                        <mat-icon matPrefix>help_outline</mat-icon>
+                        <mat-select formControlName="purpose">
+                            <mat-option *ngFor="let p of purposes" [value]="p">{{ p }}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="visitorForm.get('purpose')?.hasError('required')">Purpose is
+                            required</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="row fade-in" *ngIf="visitorForm.get('purpose')?.value === 'Other'">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Specify Purpose</mat-label>
+                        <mat-icon matPrefix>edit_note</mat-icon>
+                        <input matInput formControlName="otherPurpose" placeholder="E.g. Interior designing">
+                        <mat-error *ngIf="visitorForm.get('otherPurpose')?.hasError('required')">Please specify the
+                            purpose</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <button mat-raised-button color="primary" type="submit" [disabled]="visitorForm.invalid"
+                    class="submit-btn">
+                    Log Visitor <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+                </button>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

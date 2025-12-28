@@ -1,0 +1,51 @@
+<div class="container fade-in">
+    <div class="header-section">
+        <h1>Visitor Approvals</h1>
+        <p>Review and manage entry requests for your unit</p>
+    </div>
+
+    <div *ngIf="pendingVisitors.length === 0" class="empty-state">
+        <mat-icon>verified_user</mat-icon>
+        <h3>All Caught Up!</h3>
+        <p>No pending visitor requests at the moment.</p>
+    </div>
+
+    <div class="card-list" *ngIf="pendingVisitors.length > 0">
+        <mat-card *ngFor="let visitor of pendingVisitors; let i = index" class="approval-card"
+            [style.animation-delay]="i * 0.1 + 's'">
+            <div class="card-status-strip"></div>
+            <div class="card-main">
+                <mat-card-header>
+                    <div mat-card-avatar class="visitor-avatar">
+                        <mat-icon>person</mat-icon>
+                    </div>
+                    <mat-card-title>{{ visitor.name }}</mat-card-title>
+                    <mat-card-subtitle>{{ visitor.description || 'No description provided' }}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="info-row">
+                        <mat-icon class="info-icon">schedule</mat-icon>
+                        <span class="label">Arrived:</span>
+                        <span class="value">{{ visitor.created_at | date:'shortTime' }}</span>
+                    </div>
+                    <div class="info-row" *ngIf="visitor.date">
+                        <mat-icon class="info-icon">event</mat-icon>
+                        <span class="label">Date:</span>
+                        <span class="value">{{ visitor.date | date:'mediumDate' }}</span>
+                    </div>
+                </mat-card-content>
+            </div>
+            <mat-divider vertical></mat-divider>
+            <div class="card-actions-wrapper">
+                <button mat-stroked-button color="warn" class="action-btn reject-btn"
+                    (click)="updateStatus(visitor, 'Rejected')">
+                    <mat-icon>close</mat-icon> Reject
+                </button>
+                <button mat-raised-button color="primary" class="action-btn approve-btn"
+                    (click)="updateStatus(visitor, 'Approved')">
+                    <mat-icon>check</mat-icon> Approve
+                </button>
+            </div>
+        </mat-card>
+    </div>
+</div>

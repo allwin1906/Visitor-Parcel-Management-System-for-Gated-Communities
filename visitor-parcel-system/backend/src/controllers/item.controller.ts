@@ -6,23 +6,49 @@ import { notifyResident } from "../services/socket.service";
 
 const itemRepository = AppDataSource.getRepository(Item);
 
-export const createItem = async (req: AuthRequest, res: Response) => {
-    const { residentId, type, description } = req.body;
+// Helper to create item with specific type
+// Helper to create item with specific type
+const createItemInternal = async (req: AuthRequest, res: Response, type: ItemType) => {
+    const { residentId, name, description, media, vehicleDetails, phone, courierName, trackingId } = req.body;
     const securityGuardId = req.user!.userId;
 
-    if (!residentId || !type) {
-        return res.status(400).json({ message: "Missing fields" });
+    // Validate required fields based on type
+    if (!residentId) {
+        return res.status(400).json({ message: "Missing required field: residentId" });
+    }
+
+    if (type === ItemType.VISITOR) {
+        if (!name) return res.status(400).json({ message: "Visitor Name is required" });
+        if (!phone) return res.status(400).json({ message: "Visitor Phone is required" }); // New validation
+        if (!description) return res.status(400).json({ message: "Purpose (description) is required" });
+    } else if (type === ItemType.PARCEL) {
+        // For Parcels, "name" was overloaded, but usually we say "Courier" + "Tracking"
+        // If frontend sends courierName, we map it.
+        // Frontend sends: courierName, trackingId.
+        // Does frontend send 'name' for parcel? logic in parcel-log.component.ts might send something.
+        // Let's check parcel-log.ts or just handle what we have.
+        // The entity has 'name'. We can map courierName to name if name is missing, or use courierName column.
+
+        if (!courierName) return res.status(400).json({ message: "Courier Name is required" });
     }
 
     const item = new Item();
     item.resident_id = residentId;
     item.security_guard_id = securityGuardId;
     item.type = type;
-    item.description = description;
+    item.name = name || courierName; // Fallback for Parcel if name not sent
+    item.description = description; // Purpose
+    item.media = media;
+    item.vehicle_details = vehicleDetails;
+
+    // New fields
+    item.phone = phone;
+    item.courier_name = courierName;
+    item.tracking_id = trackingId;
 
     // Set initial status
     if (type === ItemType.VISITOR) {
-        item.status = ItemStatus.WAITING_FOR_APPROVAL;
+        item.status = ItemStatus.NEW;
     } else if (type === ItemType.PARCEL) {
         item.status = ItemStatus.RECEIVED;
     }
@@ -30,9 +56,25 @@ export const createItem = async (req: AuthRequest, res: Response) => {
     await itemRepository.save(item);
 
     // Notify resident
-    notifyResident(residentId, "NEW_ITEM", `New ${type} recorded`, item);
+    notifyResident(residentId, "NEW_ITEM", `New ${type} recorded: ${name}`, item);
 
     return res.status(201).json(item);
+};
+
+export const createVisitor = async (req: AuthRequest, res: Response) => {
+    return createItemInternal(req, res, ItemType.VISITOR);
+};
+
+export const createParcel = async (req: AuthRequest, res: Response) => {
+    return createItemInternal(req, res, ItemType.PARCEL);
+};
+
+export const createItem = async (req: AuthRequest, res: Response) => {
+    const { type } = req.body;
+    if (!type || (type !== ItemType.VISITOR && type !== ItemType.PARCEL)) {
+        return res.status(400).json({ message: "Invalid or missing item type" });
+    }
+    return createItemInternal(req, res, type);
 };
 
 export const updateStatus = async (req: AuthRequest, res: Response) => {
@@ -42,34 +84,39 @@ export const updateStatus = async (req: AuthRequest, res: Response) => {
     const item = await itemRepository.findOneBy({ id: Number(id) });
     if (!item) return res.status(404).json({ message: "Item not found" });
 
-    // Validate state transitions (simplified)
-    // Visitor: Waiting -> Approved/Rejected -> Entered -> Exited
-    // Parcel: Received -> Notified (system auto?) -> Acknowledged -> Collected
-
+    // Validate state transitions
     const current = item.status;
+    let allowed = false;
 
-    // Logic could be more complex, but sticking to basic validation
     if (item.type === ItemType.VISITOR) {
-        if (current === ItemStatus.WAITING_FOR_APPROVAL && (status === ItemStatus.APPROVED || status === ItemStatus.REJECTED)) {
-            // Allow resident to approve/reject
-            // Ensure only resident acts here? Or logic in route
-        } else if (current === ItemStatus.APPROVED && status === ItemStatus.ENTERED) {
-            // Security checkin
-        } else if (current === ItemStatus.ENTERED && status === ItemStatus.EXITED) {
-            // Security checkout
-        } else {
-            // Invalid transition, unless forced by admin? 
-            // For complexity rating 1, let's just allow updates but log/notify
-        }
+        // Visitor: New -> Approved/Rejected -> Entered -> Exited
+        if (current === ItemStatus.NEW && (status === ItemStatus.APPROVED || status === ItemStatus.REJECTED)) allowed = true;
+        else if (current === ItemStatus.APPROVED && status === ItemStatus.ENTERED) allowed = true;
+        else if (current === ItemStatus.ENTERED && status === ItemStatus.EXITED) allowed = true;
+    } else if (item.type === ItemType.PARCEL) {
+        // Parcel: Received -> Acknowledged -> Collected
+        if (current === ItemStatus.RECEIVED && status === ItemStatus.ACKNOWLEDGED) allowed = true;
+        else if (current === ItemStatus.ACKNOWLEDGED && status === ItemStatus.COLLECTED) allowed = true;
+        // Also allow Received -> Collected directly if security hands it over immediately?
+        else if (current === ItemStatus.RECEIVED && status === ItemStatus.COLLECTED) allowed = true;
+    }
+
+    // Admin can force any status
+    if (req.user!.role === 'Admin') allowed = true;
+
+    if (!allowed) {
+        return res.status(400).json({ message: `Invalid status transition from ${current} to ${status}` });
     }
 
     item.status = status;
     await itemRepository.save(item);
 
     // Notify relevant parties
-    if (req.user!.role === 'Security') {
-        notifyResident(item.resident_id, "STATUS_UPDATE", `Item ${item.id} is now ${status}`, item);
-    }
+    // If Security updates, notify resident. 
+    // If Resident updates (Acknowledged, Approved/Rejected), notify Security (optional, or just log)?
+    // For now notify resident on updates except if they did it themselves (not handled here, socket service usually handles "don't send to sender" or we just send to specific user)
+    // Actually we just notify resident always for simplicity, frontend ignores if needed.
+    notifyResident(item.resident_id, "STATUS_UPDATE", `Item ${item.id} status: ${status}`, item);
 
     return res.json(item);
 };

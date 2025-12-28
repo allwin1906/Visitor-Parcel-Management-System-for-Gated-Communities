@@ -1,0 +1,180 @@
+.container {
+    padding: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.header-section {
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.header-section h1 {
+    font-size: 2.25rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--primary-600), var(--accent-600));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.header-section p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: var(--radius-lg);
+    border: 2px dashed #e2e8f0;
+    color: var(--text-secondary);
+}
+
+.empty-state mat-icon {
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
+    margin-bottom: 1rem;
+    color: var(--success-500);
+}
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.approval-card {
+    display: flex;
+    flex-direction: row !important;
+    overflow: hidden;
+    padding: 0 !important;
+    opacity: 0;
+    animation: fadeIn 0.4s forwards;
+    transition: transform 0.2s;
+}
+
+.approval-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-colored) !important;
+}
+
+.card-status-strip {
+    width: 6px;
+    background: linear-gradient(to bottom, var(--primary-500), var(--accent-500));
+}
+
+.card-main {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.visitor-avatar {
+    background-color: var(--primary-50);
+    color: var(--primary-600);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.info-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: var(--text-light);
+}
+
+.label {
+    font-weight: 500;
+}
+
+.value {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.card-actions-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1rem;
+    gap: 0.75rem;
+    background: #f8fafc;
+    border-left: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.action-btn {
+    width: 100%;
+    min-width: 110px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+.approve-btn {
+    background-color: var(--success-500) !important;
+    box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2) !important;
+}
+
+.approve-btn:hover {
+    background-color: var(--success-700) !important;
+}
+
+.reject-btn {
+    color: var(--error-500) !important;
+    border-color: var(--error-200) !important;
+}
+
+.reject-btn:hover {
+    background-color: var(--error-50) !important;
+}
+
+@media (max-width: 600px) {
+    .approval-card {
+        flex-direction: column !important;
+    }
+
+    .card-actions-wrapper {
+        flex-direction: row;
+        border-left: none;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .card-status-strip {
+        width: 100%;
+        height: 6px;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

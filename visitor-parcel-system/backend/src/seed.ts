@@ -31,6 +31,18 @@ const seed = async () => {
             console.log("Resident user created");
         }
 
+        // Admin
+        const adminExists = await repo.findOneBy({ email: "admin@example.com" });
+        if (!adminExists) {
+            const admin = new User();
+            admin.name = "System Admin";
+            admin.email = "admin@example.com";
+            admin.password_hash = await bcrypt.hash("password", 10);
+            admin.role = UserRole.ADMIN;
+            await repo.save(admin);
+            console.log("Admin user created");
+        }
+
         console.log("Seeding complete");
     } catch (err) {
         console.error(err);

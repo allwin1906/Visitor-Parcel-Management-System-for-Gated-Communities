@@ -1,0 +1,147 @@
+<div class="dashboard-container">
+    <div class="welcome-header">
+        <div class="header-text">
+            <h1>Admin Control Panel</h1>
+            <p>Overview of system activity and user management</p>
+        </div>
+        <div class="actions">
+            <!-- Add Resident Button -->
+            <button mat-raised-button color="primary" class="action-btn" (click)="showResidentForm = !showResidentForm">
+                <mat-icon>{{ showResidentForm ? 'close' : 'person_add' }}</mat-icon>
+                {{ showResidentForm ? 'Cancel' : 'New Resident' }}
+            </button>
+
+            <!-- Logout Button -->
+            <button mat-stroked-button color="warn" class="logout-btn" (click)="logout()">
+                <mat-icon>logout</mat-icon> Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="stats-grid">
+        <mat-card *ngFor="let stat of stats; let i = index" class="stat-card" [ngClass]="'stat-' + stat.color"
+            [style.animation-delay]="i * 0.1 + 's'">
+            <div class="stat-content">
+                <div class="stat-info">
+                    <div class="stat-value">{{ stat.value }}</div>
+                    <div class="stat-title">{{ stat.title }}</div>
+                </div>
+                <div class="stat-icon-wrapper">
+                    <mat-icon>{{ stat.icon }}</mat-icon>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+
+    <!-- Add Resident Form -->
+    <div class="form-section fade-in" *ngIf="showResidentForm">
+        <mat-card class="form-card glass-panel">
+            <mat-card-header>
+                <div mat-card-avatar class="form-avatar">
+                    <mat-icon>person_add</mat-icon>
+                </div>
+                <mat-card-title>Register New Resident</mat-card-title>
+                <mat-card-subtitle>Create a new account for a community member</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <form [formGroup]="residentForm" (ngSubmit)="addResident()">
+                    <div class="form-grid">
+                        <mat-form-field appearance="outline" class="custom-field">
+                            <mat-label>Full Name</mat-label>
+                            <mat-icon matPrefix>badge</mat-icon>
+                            <input matInput formControlName="name" placeholder="John Doe">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="custom-field">
+                            <mat-label>Email Address</mat-label>
+                            <mat-icon matPrefix>email</mat-icon>
+                            <input matInput formControlName="email" placeholder="john@example.com">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="custom-field">
+                            <mat-label>Phone Number</mat-label>
+                            <mat-icon matPrefix>phone</mat-icon>
+                            <input matInput formControlName="contact_info" placeholder="1234567890">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="custom-field">
+                            <mat-label>Password</mat-label>
+                            <mat-icon matPrefix>lock</mat-icon>
+                            <input matInput formControlName="password" type="password" placeholder="Strong Password">
+                            <mat-hint>Min 8 chars, 1 number, 1 symbol</mat-hint>
+                            <mat-error *ngIf="residentForm.get('password')?.hasError('pattern')">
+                                Must contain number & symbol
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="custom-field">
+                            <mat-label>Confirm Password</mat-label>
+                            <mat-icon matPrefix>lock_reset</mat-icon>
+                            <input matInput formControlName="confirmPassword" type="password"
+                                placeholder="Repeat Password">
+                            <mat-error *ngIf="residentForm.hasError('mismatch')">
+                                Passwords do not match
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-actions">
+                        <button mat-raised-button color="primary" class="create-btn" [disabled]="residentForm.invalid">
+                            Create Resident <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+                        </button>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <!-- Users Lists -->
+    <div class="lists-grid">
+        <!-- Residents List -->
+        <mat-card class="list-card">
+            <mat-card-header class="list-header">
+                <div class="header-icon primary-bg">
+                    <mat-icon>groups</mat-icon>
+                </div>
+                <mat-card-title>Residents Directory</mat-card-title>
+            </mat-card-header>
+            <mat-divider></mat-divider>
+            <mat-list class="custom-list">
+                <mat-list-item *ngFor="let res of residents" class="list-item">
+                    <span matListItemTitle>{{ res.name }}</span>
+                    <span matListItemLine>{{ res.email }}</span>
+                    <span matListItemLine class="text-light">{{ res.contact_info || 'No Phone' }}</span>
+                    <button mat-icon-button matListItemMeta>
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                </mat-list-item>
+                <div *ngIf="residents.length === 0" class="empty-state-small">
+                    <mat-icon>person_off</mat-icon> No residents found
+                </div>
+            </mat-list>
+        </mat-card>
+
+        <!-- Security List -->
+        <mat-card class="list-card">
+            <mat-card-header class="list-header">
+                <div class="header-icon accent-bg">
+                    <mat-icon>security</mat-icon>
+                </div>
+                <mat-card-title>Security Team</mat-card-title>
+            </mat-card-header>
+            <mat-divider></mat-divider>
+            <mat-list class="custom-list">
+                <mat-list-item *ngFor="let sec of securityGuards" class="list-item">
+                    <span matListItemTitle>{{ sec.name }}</span>
+                    <span matListItemLine>{{ sec.email }}</span>
+                    <button mat-icon-button matListItemMeta>
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                </mat-list-item>
+                <div *ngIf="securityGuards.length === 0" class="empty-state-small">
+                    <mat-icon>shield</mat-icon> No guards found
+                </div>
+            </mat-list>
+        </mat-card>
+    </div>
+</div>

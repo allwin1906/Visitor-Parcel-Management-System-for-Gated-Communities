@@ -15,6 +15,9 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatTableModule } from '@angular/material/table';
+import { MatSelectModule } from '@angular/material/select';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -22,13 +25,23 @@ import { LoginComponent } from './auth/login.component';
 import { ResidentComponent } from './dashboard/resident/resident.component';
 import { SecurityComponent } from './dashboard/security/security.component';
 import { AuthInterceptor } from './core/auth.interceptor';
+import { VisitorLogComponent } from './visitor/visitor-log/visitor-log.component';
+import { ResidentApprovalComponent } from './visitor/resident-approval/resident-approval.component';
+import { ParcelLogComponent } from './parcel/parcel-log/parcel-log.component';
+import { ResidentParcelComponent } from './parcel/resident-parcel/resident-parcel.component';
+import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     ResidentComponent,
-    SecurityComponent
+    SecurityComponent,
+    VisitorLogComponent,
+    ResidentApprovalComponent,
+    ParcelLogComponent,
+    ResidentParcelComponent,
+    AdminDashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +59,10 @@ import { AuthInterceptor } from './core/auth.interceptor';
     MatChipsModule,
     MatListModule,
     MatDividerModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatTableModule,
+    MatSelectModule,
+    MatMenuModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

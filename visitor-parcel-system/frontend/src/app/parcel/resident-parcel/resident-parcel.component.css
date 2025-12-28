@@ -1,0 +1,101 @@
+.container {
+    padding: 2rem;
+}
+
+h2 {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.header-section {
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.header-section h1 {
+    font-size: 2.25rem;
+    background: linear-gradient(135deg, var(--primary-600), var(--accent-600));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.standard-card {
+    transition: all 0.3s ease;
+}
+
+.standard-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-colored) !important;
+}
+
+.parcel-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pending-bg {
+    background: var(--info-50);
+    color: var(--info-700);
+}
+
+.collected-bg {
+    background: var(--success-50);
+    color: var(--success-700);
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.info-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.label {
+    font-weight: 500;
+    min-width: 80px;
+}
+
+.value {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.collect-btn {
+    border-radius: var(--radius-md) !important;
+    padding: 0.5rem 1.5rem !important;
+}
+
+.collected {
+    opacity: 0.8;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem;
+    background: white;
+    border-radius: var(--radius-lg);
+    border: 2px dashed #e2e8f0;
+}
+
+.empty-state mat-icon {
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
+    margin-bottom: 1rem;
+    color: var(--text-light);
+}

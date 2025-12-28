@@ -1,10 +1,22 @@
 @echo off
-echo Starting Visitor ^& Parcel Management System (Local Mode)
+title Visitor System Launcher
+echo ===================================================
+echo   Starting Visitor & Parcel Management System
+echo ===================================================
 
-echo Starting Backend...
-start "Backend" cmd /k "cd backend && npm run dev"
+echo.
+echo [1/2] Launching Backend Server...
+start "Backend Server (Port 4000)" cmd /k "cd backend && npm install && npm run dev"
 
-echo Starting Frontend...
-start "Frontend" cmd /k "cd frontend && ng serve -o"
+echo.
+echo [2/2] Launching Frontend Application...
+echo This may take a minute to compile...
+start "Frontend App (Port 4200)" cmd /k "cd frontend && npm install && npm start"
 
-echo Done. Backend running on 4000. Frontend starting on 4200...
+echo.
+echo ===================================================
+echo   System is starting up!
+echo   Frontend will open automatically at: http://localhost:4200
+echo   Backend will run at: http://localhost:4000
+echo ===================================================
+pause

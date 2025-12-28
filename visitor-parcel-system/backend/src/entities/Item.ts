@@ -8,7 +8,7 @@ export enum ItemType {
 
 export enum ItemStatus {
     // Visitor statuses
-    WAITING_FOR_APPROVAL = "WaitingForApproval",
+    NEW = "New",
     APPROVED = "Approved",
     REJECTED = "Rejected",
     ENTERED = "Entered",
@@ -16,7 +16,6 @@ export enum ItemStatus {
 
     // Parcel statuses
     RECEIVED = "Received",
-    NOTIFIED = "Notified",
     ACKNOWLEDGED = "Acknowledged",
     COLLECTED = "Collected"
 }
@@ -47,12 +46,30 @@ export class Item {
 
     @Column({
         type: "varchar",
-        default: ItemStatus.WAITING_FOR_APPROVAL // Default, but typically set on creation
+        default: ItemStatus.NEW
     })
     status!: ItemStatus;
 
+    @Column()
+    name!: string; // Visitor name or Parcel details
+
     @Column({ nullable: true })
-    description!: string; // Name of visitor or parcel details
+    description!: string; // Purpose or description
+
+    @Column({ nullable: true })
+    media!: string; // File path/URL
+
+    @Column({ nullable: true })
+    vehicle_details!: string;
+
+    @Column({ nullable: true })
+    phone!: string; // Visitor phone number
+
+    @Column({ nullable: true })
+    courier_name!: string; // Parcel courier company
+
+    @Column({ nullable: true })
+    tracking_id!: string; // Parcel tracking ID
 
     @CreateDateColumn()
     created_at!: Date;

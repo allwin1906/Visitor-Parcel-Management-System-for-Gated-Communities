@@ -1,0 +1,48 @@
+<div class="container fade-in">
+    <div class="header-section">
+        <h1>My Parcels</h1>
+        <p>Track and manage your deliveries</p>
+    </div>
+
+    <div *ngIf="parcels.length === 0" class="empty-state">
+        <mat-icon>inventory</mat-icon>
+        <h3>No parcels waiting</h3>
+        <p>You're all caught up! No pending deliveries for your unit.</p>
+    </div>
+
+    <div class="card-list" *ngIf="parcels.length > 0">
+        <mat-card *ngFor="let parcel of parcels; let i = index" class="standard-card"
+            [ngClass]="{'collected': parcel.status === 'Collected'}" [style.animation-delay]="i * 0.1 + 's'">
+            <div class="card-main">
+                <mat-card-header>
+                    <div mat-card-avatar class="parcel-avatar"
+                        [ngClass]="parcel.status === 'Collected' ? 'collected-bg' : 'pending-bg'">
+                        <mat-icon>{{ parcel.status === 'Collected' ? 'check_circle' : 'inventory_2' }}</mat-icon>
+                    </div>
+                    <mat-card-title>{{ parcel.name }}</mat-card-title>
+                    <mat-card-subtitle>{{ parcel.description || 'No additional details' }}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="info-row">
+                        <mat-icon class="info-icon">event</mat-icon>
+                        <span class="label">Received:</span>
+                        <span class="value">{{ parcel.created_at | date:'medium' }}</span>
+                    </div>
+                    <div class="info-row">
+                        <mat-icon class="info-icon">info</mat-icon>
+                        <span class="label">Status:</span>
+                        <span class="status-chip" [ngClass]="'status-' + parcel.status.toLowerCase()">
+                            {{ parcel.status }}
+                        </span>
+                    </div>
+                </mat-card-content>
+            </div>
+
+            <mat-card-actions align="end" *ngIf="parcel.status !== 'Collected'">
+                <button mat-raised-button color="primary" class="collect-btn" (click)="acknowledgeParcel(parcel)">
+                    Confirm Collection <mat-icon iconPositionEnd>task_alt</mat-icon>
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>

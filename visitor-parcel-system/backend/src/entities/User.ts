@@ -20,6 +20,9 @@ export class User {
     @Column()
     password_hash!: string;
 
+    @Column({ nullable: true })
+    contact_info!: string;
+
     @Column({
         type: "varchar", // specific enum type not supported in sqlite
         default: UserRole.RESIDENT

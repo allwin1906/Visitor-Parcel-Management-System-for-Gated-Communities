@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 const userRepository = AppDataSource.getRepository(User);
 
 export const register = async (req: Request, res: Response) => {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, contact_info } = req.body;
 
     // Basic validation
     if (!email || !password || !name) {
@@ -23,6 +23,7 @@ export const register = async (req: Request, res: Response) => {
     user.email = email;
     user.password_hash = hashedPassword;
     user.role = role || UserRole.RESIDENT;
+    user.contact_info = contact_info;
 
     await userRepository.save(user);
     return res.status(201).json({ message: "User created" });
