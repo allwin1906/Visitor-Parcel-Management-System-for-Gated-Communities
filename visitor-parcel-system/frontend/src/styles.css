@@ -34,17 +34,22 @@
   --info-500: #3b82f6;
   --info-700: #1d4ed8;
 
-  /* -- Backgrounds -- */
+  /* -- Backgrounds (Themed) -- */
   --bg-body: #f8fafc;
   --bg-surface: #ffffff;
   --bg-glass: rgba(255, 255, 255, 0.9);
+  --bg-input: #ffffff;
 
-  /* -- Text -- */
+  /* -- Text (Themed) -- */
   --text-primary: #0f172a;
   --text-secondary: #64748b;
   --text-light: #94a3b8;
 
-  /* -- Shadows -- */
+  /* -- Borders (Themed) -- */
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-light: rgba(0, 0, 0, 0.04);
+
+  /* -- Shadows (Themed) -- */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -56,18 +61,39 @@
   --radius-xl: 24px;
 }
 
+.dark-theme {
+  --bg-body: #0f172a;
+  --bg-surface: #1e293b;
+  --bg-glass: rgba(30, 41, 59, 0.8);
+  --bg-input: #334155;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-light: #64748b;
+
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-light: rgba(255, 255, 255, 0.05);
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+
+  --primary-50: rgba(99, 102, 241, 0.15);
+  --primary-100: rgba(99, 102, 241, 0.25);
+
+  --success-50: rgba(16, 185, 129, 0.1);
+  --warning-50: rgba(245, 158, 11, 0.1);
+  --error-50: rgba(239, 68, 68, 0.1);
+  --info-50: rgba(59, 130, 246, 0.1);
+}
+
 body {
   margin: 0;
   font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
   background-color: var(--bg-body);
-  background-image:
-    radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 0) 0, transparent 50%),
-    radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 0) 0, transparent 50%),
-    radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 0) 0, transparent 50%);
-  background-attachment: fixed;
   color: var(--text-primary);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
 }
 
 h1,
@@ -159,12 +185,11 @@ p {
 
 /* App Toolbar */
 .mat-toolbar.mat-primary {
-  background: var(--bg-surface) !important;
+  background: var(--bg-glass) !important;
   color: var(--text-primary) !important;
   box-shadow: var(--shadow-sm);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid var(--border-color);
   backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.9) !important;
 }
 
 /* Cards */
@@ -172,7 +197,7 @@ p {
   border-radius: var(--radius-lg) !important;
   background-color: var(--bg-surface) !important;
   box-shadow: var(--shadow-md) !important;
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--border-color);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
@@ -229,9 +254,9 @@ p {
 }
 
 .mat-mdc-text-field-wrapper {
-  background-color: white !important;
+  background-color: var(--bg-input) !important;
   border-radius: var(--radius-md) !important;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border-color);
 }
 
 /* --- Status Badges --- */
@@ -303,9 +328,9 @@ p {
   padding: 3rem;
   text-align: center;
   color: var(--text-secondary);
-  background: var(--bg-body);
+  background: var(--bg-surface);
   border-radius: var(--radius-lg);
-  border: 2px dashed #cbd5e1;
+  border: 2px dashed var(--border-color);
   margin: 1rem 0;
 }
 
@@ -331,10 +356,10 @@ p {
 }
 
 .glass-panel {
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--bg-glass);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--border-color);
 }
 
 .flex-center {
@@ -356,7 +381,7 @@ p {
 
 /* Table styles */
 table.mat-mdc-table {
-  background: white !important;
+  background: var(--bg-surface) !important;
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
@@ -382,5 +407,5 @@ tr.mat-mdc-row:hover {
 td.mat-mdc-cell {
   font-size: 0.875rem;
   color: var(--text-secondary);
-  border-bottom-color: rgba(0, 0, 0, 0.05) !important;
+  border-bottom-color: var(--border-light) !important;
 }

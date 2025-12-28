@@ -7,6 +7,10 @@
         <button mat-button routerLink="/security" *ngIf="user.role === 'Security'">Security</button>
         <button mat-button routerLink="/admin/dashboard" *ngIf="user.role === 'Admin'">Admin</button>
 
+        <button mat-icon-button (click)="toggleTheme()" matTooltip="Toggle Dark Mode">
+            <mat-icon>{{ (isDarkMode$ | async) ? 'light_mode' : 'dark_mode' }}</mat-icon>
+        </button>
+
         <button mat-icon-button [matMenuTriggerFor]="menu">
             <mat-icon>account_circle</mat-icon>
         </button>

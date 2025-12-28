@@ -129,8 +129,8 @@ import { Router } from '@angular/router';
       position: relative;
       overflow: hidden;
       height: 100%;
-      border: 1px solid rgba(255,255,255,0.6);
-      background: linear-gradient(145deg, #ffffff, #f8fafc);
+      border: 1px solid var(--border-color) !important;
+      background: var(--bg-surface) !important;
     }
 
     .card-bg-icon {
@@ -165,7 +165,7 @@ import { Router } from '@angular/router';
     }
 
     .visitor-icon-bg { background: var(--primary-50); color: var(--primary-600); }
-    .parcel-icon-bg { background: var(--accent-500); color: white; }
+    .parcel-icon-bg { background: var(--primary-50); opacity: 0.9; color: var(--accent-600); }
 
     .action-card mat-card-header {
         display: flex;
@@ -209,13 +209,13 @@ import { Router } from '@angular/router';
       padding: 1rem 1.5rem !important;
       gap: 1.5rem;
       border-radius: 16px;
-      border: 1px solid transparent;
+      border: 1px solid var(--border-color) !important;
+      background: var(--bg-surface) !important;
       transition: all 0.2s;
     }
 
     .activity-item:hover {
-      border-color: var(--primary-100);
-      background: white;
+      border-color: var(--primary-500) !important;
       transform: translateX(5px);
     }
 

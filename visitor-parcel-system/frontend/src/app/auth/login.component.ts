@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../core/auth.service';
 import { Router } from '@angular/router';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-login',
@@ -38,7 +39,7 @@ import { Router } from '@angular/router';
                 <mat-icon>arrow_forward</mat-icon>
             </button>
             
-            <div *ngIf="error" class="error-msg" [@fadeIn]>
+            <div *ngIf="error" class="error-msg" @fadeIn>
                 <mat-icon>error_outline</mat-icon> 
                 <span>{{ error }}</span>
             </div>
@@ -59,17 +60,11 @@ import { Router } from '@angular/router';
         width: 100%; 
         max-width: 400px; 
         padding-bottom: 2rem;
-        border: 1px solid rgba(255,255,255,0.8);
-        background: rgba(255, 255, 255, 0.85); /* Fallback */
+        background: var(--bg-glass) !important;
+        border: 1px solid var(--border-color) !important;
+        backdrop-filter: blur(20px);
     }
     
-    @supports (backdrop-filter: blur(10px)) {
-        .login-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-        }
-    }
-
     .login-header {
         display: flex;
         flex-direction: column;
@@ -107,7 +102,9 @@ import { Router } from '@angular/router';
         font-size: 1.75rem;
         font-weight: 800;
         margin-bottom: 0.5rem;
+        color: var(--text-primary);
         background: linear-gradient(135deg, var(--text-primary), var(--primary-700));
+        background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
@@ -147,10 +144,18 @@ import { Router } from '@angular/router';
         align-items: center; 
         gap: 0.75rem;
         font-size: 0.9rem;
-        border: 1px solid #fca5a5;
+        border: 1px solid var(--border-color);
         margin-top: 0.5rem;
     }
-  `]
+  `],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-10px)' }),
+        animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ])
+    ])
+  ]
 })
 export class LoginComponent {
   loginForm: FormGroup;
@@ -167,7 +172,9 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.auth.login(this.loginForm.value).subscribe({
         next: (res) => {
-          if (res.user.role === 'Security' || res.user.role === 'Admin') {
+          if (res.user.role === 'Admin') {
+            this.router.navigate(['/admin/dashboard']);
+          } else if (res.user.role === 'Security') {
             this.router.navigate(['/security']);
           } else {
             this.router.navigate(['/resident']);
