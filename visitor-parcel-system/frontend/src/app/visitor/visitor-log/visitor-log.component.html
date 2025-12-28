@@ -52,6 +52,20 @@
                     </mat-form-field>
                 </div>
 
+                <div class="row">
+                    <mat-form-field appearance="outline" class="half-width">
+                        <mat-label>Vehicle Details (Optional)</mat-label>
+                        <mat-icon matPrefix>directions_car</mat-icon>
+                        <input matInput formControlName="vehicleDetails" placeholder="KA-01-AB-1234">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="half-width">
+                        <mat-label>Media/Image URL (Optional)</mat-label>
+                        <mat-icon matPrefix>image</mat-icon>
+                        <input matInput formControlName="media" placeholder="http://path-to-id-proof.jpg">
+                    </mat-form-field>
+                </div>
+
                 <div class="row fade-in" *ngIf="visitorForm.get('purpose')?.value === 'Other'">
                     <mat-form-field appearance="outline" class="full-width">
                         <mat-label>Specify Purpose</mat-label>

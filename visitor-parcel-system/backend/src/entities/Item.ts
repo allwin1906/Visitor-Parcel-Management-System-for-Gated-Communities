@@ -9,6 +9,7 @@ export enum ItemType {
 export enum ItemStatus {
     // Visitor statuses
     NEW = "New",
+    WAITING = "Waiting",
     APPROVED = "Approved",
     REJECTED = "Rejected",
     ENTERED = "Entered",
@@ -54,7 +55,7 @@ export class Item {
     name!: string; // Visitor name or Parcel details
 
     @Column({ nullable: true })
-    description!: string; // Purpose or description
+    purpose!: string; // Purpose or description
 
     @Column({ nullable: true })
     media!: string; // File path/URL

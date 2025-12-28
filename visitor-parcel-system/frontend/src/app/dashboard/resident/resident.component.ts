@@ -81,7 +81,7 @@ import { Subscription } from 'rxjs';
                 <mat-icon>{{ item.type === 'Visitor' ? 'person' : 'inventory_2' }}</mat-icon>
                 </div>
                 <div class="activity-details">
-                <span class="activity-title">{{ item.name || item.description }}</span>
+                <span class="activity-title">{{ item.name || item.purpose }}</span>
                 <span class="activity-meta">
                     {{ item.type }} &bull; {{ item.created_at | date:'short' }}
                 </span>

@@ -29,6 +29,8 @@ export class VisitorLogComponent implements OnInit {
       purpose: ['', Validators.required],
       otherPurpose: [''],
       residentId: ['', Validators.required], // Mapped to unitNumber in UI
+      vehicleDetails: [''],
+      media: [''],
       entryTime: [new Date(), Validators.required]
     });
 
@@ -63,9 +65,9 @@ export class VisitorLogComponent implements OnInit {
         residentId: formVal.residentId,
         name: formVal.name,
         phone: formVal.contactWrapper.phone,
-        description: finalPurpose,
-        media: '', // Optional
-        vehicleDetails: '' // Optional
+        purpose: finalPurpose,
+        media: formVal.media || '',
+        vehicleDetails: formVal.vehicleDetails || ''
       };
 
       this.apiService.createVisitor(payload).subscribe({

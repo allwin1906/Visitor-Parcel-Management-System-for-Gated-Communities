@@ -21,7 +21,7 @@ export const register = async (req: Request, res: Response) => {
     const user = new User();
     user.name = name;
     user.email = email;
-    user.password_hash = hashedPassword;
+    user.password = hashedPassword;
     user.role = role || UserRole.RESIDENT;
     user.contact_info = contact_info;
 
@@ -35,7 +35,7 @@ export const login = async (req: Request, res: Response) => {
     const user = await userRepository.findOneBy({ email });
     if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
-    const valid = await bcrypt.compare(password, user.password_hash);
+    const valid = await bcrypt.compare(password, user.password);
     if (!valid) return res.status(400).json({ message: "Invalid credentials" });
 
     const token = jwt.sign(

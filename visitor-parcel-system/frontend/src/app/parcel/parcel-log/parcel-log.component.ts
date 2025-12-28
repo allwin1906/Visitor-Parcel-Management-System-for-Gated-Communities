@@ -22,7 +22,8 @@ export class ParcelLogComponent implements OnInit {
     this.parcelForm = this.fb.group({
       residentId: ['', Validators.required],
       courierName: ['', Validators.required],
-      trackingId: [''], // Optional description
+      trackingId: [''],
+      media: [''],
       arrivalDate: [new Date(), Validators.required]
     });
 
@@ -45,8 +46,8 @@ export class ParcelLogComponent implements OnInit {
         courierName: formVal.courierName,
         trackingId: formVal.trackingId || '',
         name: formVal.courierName, // Fallback
-        description: formVal.trackingId ? `Tracking: ${formVal.trackingId}` : 'No tracking ID',
-        media: '',
+        purpose: formVal.trackingId ? `Tracking: ${formVal.trackingId}` : 'No tracking ID',
+        media: formVal.media || '',
         vehicleDetails: ''
       };
 

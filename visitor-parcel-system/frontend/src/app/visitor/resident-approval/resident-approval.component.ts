@@ -28,8 +28,8 @@ export class ResidentApprovalComponent implements OnInit {
 
     this.apiService.getItems(user.id).subscribe({
       next: (items) => {
-        // Filter for Visitors that are New
-        this.pendingVisitors = items.filter(i => i.type === 'Visitor' && i.status === 'New');
+        // Filter for Visitors that are Waiting
+        this.pendingVisitors = items.filter(i => i.type === 'Visitor' && i.status === 'Waiting');
       },
       error: (err) => console.error(err)
     });

@@ -1,30 +1,31 @@
 # 🏢 Visitor & Parcel Management System for Gated Communities
 
-A modern, full-stack application designed to streamline security operations and enhance the living experience in gated communities. This system provides a digital alternative to manual registers, offering real-time visitor approvals and parcel delivery tracking.
+A modern, **full-stack** application designed to streamline security operations and enhance the living experience in gated communities. This system provides a digital alternative to manual registers, offering real-time visitor approvals, parcel delivery tracking, and role-based dashboards.
 
 ## 📌 Project Overview
-The **Visitor & Parcel Management System** solves the security and logistical challenges faced by modern residential complexes. 
+The **Visitor & Parcel Management System** is a complete end-to-end solution featuring a robust Node.js backend, a MySQL database, and a polished Angular frontend. It has been transformed from a frontend prototype into a fully functional requirement-compliant application.
 
-### Why this project?
-- **For Security**: Eliminates manual paperwork and provides an instant way to reach residents.
-- **For Residents**: Complete control over who enters their premises and instant notification of package arrivals.
-- **For Admin**: Centralized monitoring of community activity and staff performance.
+### Key features:
+- **🌓 Dark Mode**: Premium themed experience with seamless light/dark mode persistence.
+- **⚡ Real-time Notifications**: Socket.IO integration to notify residents instantly when a visitor or parcel arrives.
+- **🛡️ Secure Auth**: JWT-based authentication with strict role-based access control (RBAC).
+- **📱 Smart Dashboards**: Specialized views for Security, Residents, and Admin.
+- **📊 Database Integrity**: Optimized MySQL schema using strictly two tables for high performance.
 
 ### User Roles
-- **🏠 Residents**: Approve/Reject visitors, acknowledge parcels, and view personal logs.
-- **👮 Security Guards**: Log visitor/parcel entries and manage status transitions.
-- **⚙️ Administrators**: View global analytics and manage the resident directory.
+- **🏠 Residents**: Manage real-time visitor entry requests and acknowledge parcel pickups.
+- **👮 Security Guards**: Log entries for visitors & parcels and manage entry/exit flows.
+- **⚙️ Administrators**: Global system monitoring, user registration, and directory management.
 
 ---
 
 ## 🛠️ Prerequisites
-Before getting started, ensure you have the following installed on your machine:
+Before getting started, ensure you have the following installed:
 
-- **Node.js** (v18 or above)
+- **Node.js** (v18+)
+- **MySQL Server** (Running on port 3306)
 - **npm** (Included with Node.js)
-- **Git** (For cloning the repository)
 - **Modern Web Browser** (Chrome or Edge recommended)
-- **VS Code** (Optional but recommended for development)
 
 ---
 
@@ -33,80 +34,75 @@ Before getting started, ensure you have the following installed on your machine:
 1.  **Clone the Repository**
     ```bash
     git clone https://github.com/allwin1906/Visitor-Parcel-Management-System-for-Gated-Communities.git
-    ```
-
-2.  **Navigate to Project Folder**
-    ```bash
     cd Visitor-Parcel-Management-System-for-Gated-Communities/visitor-parcel-system
     ```
 
-3.  **Install Dependencies & Start**
-    - **Method A: The Fast Way (Windows)**
-      Double-click the `start-local.bat` file. This script will automatically install all necessary dependencies for both frontend and backend and launch the servers in separate windows.
-    
-    - **Method B: Manual Way (Multi-Terminal)**
-      - **Backend**: `cd backend && npm install && npm run dev`
+2.  **Configure Database**
+    - Ensure MySQL is running.
+    - Create a database named `visitor_system` (or update `.env` in the backend folder).
+    - The system uses **TypeORM** with `synchronize: true` to auto-create tables on first run.
+
+3.  **Seed Default Accounts (Crucial)**
+    Navigate to the backend folder and run the seed script to create the default users:
+    ```bash
+    cd backend
+    npm install
+    npm run seed
+    ```
+
+4.  **Run the Application**
+    - **Windows (Automatic)**: 
+      From the `visitor-parcel-system` root, double-click `start-local.bat`.
+    - **Manual (Manual Way)**:
+      - **Backend**: `cd backend && npm run dev`
       - **Frontend**: `cd frontend && npm install && npm start`
 
-4.  **Access the Application**
-    Open your browser and visit:
+5.  **Access points**
     - **Frontend:** [http://localhost:4200](http://localhost:4200)
     - **Backend API:** [http://localhost:4000](http://localhost:4000)
 
 ---
 
-## 🔑 Login Credentials (Demo Users)
-Use these pre-configured accounts to test and evaluate the application workflow:
+## 🔑 Login Credentials (After Seeding)
+Use these accounts to evaluate the full-stack workflow:
 
-### **ADMIN LOGIN**
-- **Email:** `admin@example.com`
-- **Password:** `admin123`
-
-### **SECURITY LOGIN**
-- **Email:** `security@example.com`
-- **Password:** `security123`
-
-### **RESIDENT LOGIN**
-- **Email:** `resident@example.com`
-- **Password:** `resident123`
-
-> *Note: These are demo credentials used for evaluation. If the custom passwords do not work on your local environment, try using `password`.*
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **Admin** | `admin@example.com` | `password` |
+| **Security** | `security@example.com` | `password` |
+| **Resident** | `john@example.com` | `password` |
 
 ---
 
-## 📱 How to Use the Application
+## 💻 Tech Stack
+- **Frontend**: Angular 16, TypeScript, Angular Material, RxJS.
+- **Backend**: Node.js, Express, TypeORM.
+- **Database**: MySQL.
+- **Real-time**: Socket.IO.
+- **Auth**: JSON Web Tokens (JWT).
+
+---
+
+## 📱 Core Workflows
 
 ### **👮 SECURITY GUARD**
-1. **Log Visitors**: Record the name, phone, and purpose of every visitor at the gate.
-2. **Log Parcels**: Record incoming couriers and assign them to the correct resident.
-3. **Manage Status**: Mark visitors as 'Entered' or 'Exited' to keep the log updated.
+- **Log Visitors**: Record name, phone, and purpose. Status starts as `Waiting`.
+- **Log Parcels**: Record courier and tracking details. Status starts as `Received`.
+- **Manage Entry**: Mark visitors as `Entered` or `Exited` once they cross the gate.
 
 ### **🏠 RESIDENT**
-1. **Visitor Approvals**: Receive real-time requests and mark them as **Approved** or **Rejected**.
-2. **Parcel Collection**: View your pending parcels and mark them as **Collected** once you pick them up.
-3. **History**: Easily track who visited your unit and when.
+- **Approve Entries**: Receive instant alerts for `Waiting` visitors and mark them as `Approved` or `Rejected`.
+- **Track Parcels**: View assigned parcels and mark them as `Collected` upon pickup.
 
 ### **⚙️ ADMIN**
-1. **Dashboard Stats**: View total visitors today, pending approvals, and staff numbers.
-2. **Staff Management**: View and verify the security team directory.
-3. **Resident Directory**: Monitor the list of all registered residents.
+- **System Monitoring**: View total visitors, pending requests, and parcel logs.
+- **User Management**: Register new residents or security staff directly into the database.
 
 ---
 
 ## 🤝 Team Collaboration
-*   **Context**: This is an internship project built by a 4-member team.
-*   **Version Control**: We use Git for collaboration.
-*   **Guidelines**:
-    *   **Always Pull** the latest changes before starting work.
-    *   Follow clear and descriptive commit message patterns.
-    *   Test your changes locally before committing.
-
----
-
-## 📝 Important Notes
-*   **Frontend-Based Implementation**: The project features a highly polished UI for demonstration.
-*   **Lifecycle Rules**: statuses follow strict transitions (e.g., a parcel must be 'Received' before it can be 'Collected').
-*   **System Integrity**: Do not modify core business logic without consulting the lead developer.
+*   **Version Control**: GitHub (`main` branch).
+*   **Standards**: Branch before merging, descriptive commit messages, and local verification before push.
 
 ---
 *Developed for a smarter, safer community living experience.*

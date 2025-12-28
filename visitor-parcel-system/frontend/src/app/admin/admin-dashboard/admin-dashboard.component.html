@@ -41,8 +41,8 @@
                 <div mat-card-avatar class="form-avatar">
                     <mat-icon>person_add</mat-icon>
                 </div>
-                <mat-card-title>Register New Resident</mat-card-title>
-                <mat-card-subtitle>Create a new account for a community member</mat-card-subtitle>
+                <mat-card-title>Register New User</mat-card-title>
+                <mat-card-subtitle>Create a new account for a community member or security staff</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
                 <form [formGroup]="residentForm" (ngSubmit)="addResident()">
@@ -84,10 +84,18 @@
                                 Passwords do not match
                             </mat-error>
                         </mat-form-field>
+                        <mat-form-field appearance="outline" class="custom-field">
+                            <mat-label>Account Role</mat-label>
+                            <mat-icon matPrefix>manage_accounts</mat-icon>
+                            <mat-select formControlName="role">
+                                <mat-option value="Resident">Resident</mat-option>
+                                <mat-option value="Security">Security Guard</mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
                     <div class="form-actions">
                         <button mat-raised-button color="primary" class="create-btn" [disabled]="residentForm.invalid">
-                            Create Resident <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+                            Create User <mat-icon iconPositionEnd>arrow_forward</mat-icon>
                         </button>
                     </div>
                 </form>
@@ -140,6 +148,52 @@
                 </mat-list-item>
                 <div *ngIf="securityGuards.length === 0" class="empty-state-small">
                     <mat-icon>shield</mat-icon> No guards found
+                </div>
+            </mat-list>
+        </mat-card>
+    </div>
+    <!-- System History Lists -->
+    <div class="lists-grid" style="margin-top: 2rem;">
+        <!-- Visitor History -->
+        <mat-card class="list-card">
+            <mat-card-header class="list-header">
+                <div class="header-icon" style="background: var(--primary-50); color: var(--primary-600);">
+                    <mat-icon>history</mat-icon>
+                </div>
+                <mat-card-title>System Visitor Log</mat-card-title>
+            </mat-card-header>
+            <mat-divider></mat-divider>
+            <mat-list class="custom-list">
+                <mat-list-item *ngFor="let v of allVisitors" class="list-item">
+                    <span matListItemTitle>{{ v.name }}</span>
+                    <span matListItemLine>For: {{ v.resident?.name }} &bull; Status: <strong>{{ v.status
+                            }}</strong></span>
+                    <span matListItemLine class="text-light">{{ v.created_at | date:'medium' }}</span>
+                </mat-list-item>
+                <div *ngIf="allVisitors.length === 0" class="empty-state-small">
+                    <mat-icon>event_busy</mat-icon> No visitors logged
+                </div>
+            </mat-list>
+        </mat-card>
+
+        <!-- Parcel History -->
+        <mat-card class="list-card">
+            <mat-card-header class="list-header">
+                <div class="header-icon" style="background: var(--info-50); color: var(--info-700);">
+                    <mat-icon>inventory</mat-icon>
+                </div>
+                <mat-card-title>System Parcel Log</mat-card-title>
+            </mat-card-header>
+            <mat-divider></mat-divider>
+            <mat-list class="custom-list">
+                <mat-list-item *ngFor="let p of allParcels" class="list-item">
+                    <span matListItemTitle>{{ p.name }}</span>
+                    <span matListItemLine>For: {{ p.resident?.name }} &bull; Status: <strong>{{ p.status
+                            }}</strong></span>
+                    <span matListItemLine class="text-light">{{ p.created_at | date:'medium' }}</span>
+                </mat-list-item>
+                <div *ngIf="allParcels.length === 0" class="empty-state-small">
+                    <mat-icon>package_2</mat-icon> No parcels logged
                 </div>
             </mat-list>
         </mat-card>

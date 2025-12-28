@@ -14,6 +14,8 @@ export class AdminDashboardComponent implements OnInit {
   residentForm: FormGroup;
   residents: any[] = [];
   securityGuards: any[] = [];
+  allVisitors: any[] = [];
+  allParcels: any[] = [];
 
   // Toggle for visibility
   showResidentForm = false;
@@ -47,6 +49,14 @@ export class AdminDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.loadStats();
     this.loadUsers();
+    this.loadHistory();
+  }
+
+  loadHistory() {
+    this.apiService.getItems().subscribe(data => {
+      this.allVisitors = data.filter(i => i.type === 'Visitor');
+      this.allParcels = data.filter(i => i.type === 'Parcel');
+    });
   }
 
   loadStats() {
@@ -78,7 +88,7 @@ export class AdminDashboardComponent implements OnInit {
 
     this.apiService.registerUser(payload).subscribe({
       next: () => {
-        this.snackBar.open('Resident added successfully', 'OK', { duration: 3000 });
+        this.snackBar.open('User registered successfully', 'OK', { duration: 3000 });
         this.residentForm.reset({ role: 'Resident' });
         this.showResidentForm = false;
         this.loadUsers();

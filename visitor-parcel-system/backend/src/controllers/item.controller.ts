@@ -9,7 +9,7 @@ const itemRepository = AppDataSource.getRepository(Item);
 // Helper to create item with specific type
 // Helper to create item with specific type
 const createItemInternal = async (req: AuthRequest, res: Response, type: ItemType) => {
-    const { residentId, name, description, media, vehicleDetails, phone, courierName, trackingId } = req.body;
+    const { residentId, name, purpose, media, vehicleDetails, phone, courierName, trackingId } = req.body;
     const securityGuardId = req.user!.userId;
 
     // Validate required fields based on type
@@ -20,7 +20,7 @@ const createItemInternal = async (req: AuthRequest, res: Response, type: ItemTyp
     if (type === ItemType.VISITOR) {
         if (!name) return res.status(400).json({ message: "Visitor Name is required" });
         if (!phone) return res.status(400).json({ message: "Visitor Phone is required" }); // New validation
-        if (!description) return res.status(400).json({ message: "Purpose (description) is required" });
+        if (!purpose) return res.status(400).json({ message: "Purpose (description) is required" });
     } else if (type === ItemType.PARCEL) {
         // For Parcels, "name" was overloaded, but usually we say "Courier" + "Tracking"
         // If frontend sends courierName, we map it.
@@ -37,7 +37,7 @@ const createItemInternal = async (req: AuthRequest, res: Response, type: ItemTyp
     item.security_guard_id = securityGuardId;
     item.type = type;
     item.name = name || courierName; // Fallback for Parcel if name not sent
-    item.description = description; // Purpose
+    item.purpose = purpose; // Purpose
     item.media = media;
     item.vehicle_details = vehicleDetails;
 
@@ -48,7 +48,7 @@ const createItemInternal = async (req: AuthRequest, res: Response, type: ItemTyp
 
     // Set initial status
     if (type === ItemType.VISITOR) {
-        item.status = ItemStatus.NEW;
+        item.status = ItemStatus.WAITING;
     } else if (type === ItemType.PARCEL) {
         item.status = ItemStatus.RECEIVED;
     }
@@ -89,15 +89,14 @@ export const updateStatus = async (req: AuthRequest, res: Response) => {
     let allowed = false;
 
     if (item.type === ItemType.VISITOR) {
-        // Visitor: New -> Approved/Rejected -> Entered -> Exited
-        if (current === ItemStatus.NEW && (status === ItemStatus.APPROVED || status === ItemStatus.REJECTED)) allowed = true;
+        // Visitor: Waiting -> Approved/Rejected -> Entered -> Exited
+        if (current === ItemStatus.WAITING && (status === ItemStatus.APPROVED || status === ItemStatus.REJECTED)) allowed = true;
         else if (current === ItemStatus.APPROVED && status === ItemStatus.ENTERED) allowed = true;
         else if (current === ItemStatus.ENTERED && status === ItemStatus.EXITED) allowed = true;
     } else if (item.type === ItemType.PARCEL) {
         // Parcel: Received -> Acknowledged -> Collected
         if (current === ItemStatus.RECEIVED && status === ItemStatus.ACKNOWLEDGED) allowed = true;
         else if (current === ItemStatus.ACKNOWLEDGED && status === ItemStatus.COLLECTED) allowed = true;
-        // Also allow Received -> Collected directly if security hands it over immediately?
         else if (current === ItemStatus.RECEIVED && status === ItemStatus.COLLECTED) allowed = true;
     }
 

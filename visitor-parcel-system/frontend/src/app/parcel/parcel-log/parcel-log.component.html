@@ -34,6 +34,12 @@
                     <input matInput formControlName="trackingId" placeholder="Tracking Number">
                 </mat-form-field>
 
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Parcel Image URL (Optional)</mat-label>
+                    <mat-icon matPrefix>image</mat-icon>
+                    <input matInput formControlName="media" placeholder="http://path-to-parcel-photo.jpg">
+                </mat-form-field>
+
                 <button mat-raised-button color="accent" type="submit" [disabled]="parcelForm.invalid"
                     class="submit-btn accent-btn">
                     Log Parcel <mat-icon iconPositionEnd>send</mat-icon>

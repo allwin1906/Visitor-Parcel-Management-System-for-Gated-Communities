@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../core/auth.service';
 import { ApiService } from '../../shared/api.service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-security',
@@ -81,6 +82,11 @@ import { Router } from '@angular/router';
                     <mat-icon class="chip-icon" *ngIf="item.status === 'Collected'">inventory</mat-icon>
                     {{ item.status }}
                 </span>
+                <div class="item-actions">
+                  <button mat-flat-button color="primary" *ngIf="item.type === 'Visitor' && item.status === 'Approved'" (click)="updateStatus(item, 'Entered')">ENTER</button>
+                  <button mat-flat-button color="warn" *ngIf="item.type === 'Visitor' && item.status === 'Entered'" (click)="updateStatus(item, 'Exited')">EXIT</button>
+                  <button mat-flat-button color="accent" *ngIf="item.type === 'Parcel' && item.status === 'Received'" (click)="updateStatus(item, 'Collected')">PICKUP</button>
+                </div>
                 </div>
             </mat-card>
           </div>
@@ -255,6 +261,21 @@ import { Router } from '@angular/router';
         width: 16px;
         height: 16px;
     }
+
+    .item-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-left: 1rem;
+    }
+
+    .item-actions button {
+      height: 32px;
+      line-height: 32px;
+      padding: 0 12px !important;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 8px;
+    }
   `]
 })
 export class SecurityComponent implements OnInit {
@@ -263,7 +284,8 @@ export class SecurityComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private api: ApiService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -286,5 +308,17 @@ export class SecurityComponent implements OnInit {
 
   navigate(path: string) {
     this.router.navigate([path]);
+  }
+
+  updateStatus(item: any, status: string) {
+    this.api.updateItemStatus(item.id, status).subscribe({
+      next: () => {
+        this.snackBar.open(`Status updated to ${status}`, 'OK', { duration: 3000 });
+        this.loadRecentActivity();
+      },
+      error: (err) => {
+        this.snackBar.open('Update failed: ' + err.error?.message, 'Close', { duration: 3000 });
+      }
+    });
   }
 }
