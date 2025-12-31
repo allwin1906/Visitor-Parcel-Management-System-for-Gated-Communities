@@ -9,14 +9,16 @@ const userRepository = AppDataSource.getRepository(User);
 export const register = async (req: Request, res: Response) => {
     const { name, email, password, role, contact_info } = req.body;
 
-    // Basic validation
+    // checking if all required fields are present
     if (!email || !password || !name) {
         return res.status(400).json({ message: "Missing fields" });
     }
 
-    const existing = await userRepository.findOneBy({ email });
-    if (existing) return res.status(400).json({ message: "User already exists" });
+    // prevent duplicate accounts
+    const userExists = await userRepository.findOneBy({ email });
+    if (userExists) return res.status(400).json({ message: "User already exists" });
 
+    // encrypt password before saving to db
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User();
     user.name = name;
@@ -32,12 +34,15 @@ export const register = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
+    // find user by provided email
     const user = await userRepository.findOneBy({ email });
     if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
+    // verify password match
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) return res.status(400).json({ message: "Invalid credentials" });
 
+    // generate session token
     const token = jwt.sign(
         { userId: user.id, role: user.role },
         process.env.JWT_SECRET || "secret_key",

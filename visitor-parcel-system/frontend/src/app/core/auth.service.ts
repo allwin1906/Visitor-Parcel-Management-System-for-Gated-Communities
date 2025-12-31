@@ -21,10 +21,11 @@ export class AuthService {
 
     login(credentials: any): Observable<any> {
         return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
-            tap((res: any) => {
-                localStorage.setItem('token', res.token);
-                localStorage.setItem('user', JSON.stringify(res.user));
-                this.userSubject.next(res.user);
+            tap((response: any) => {
+                // storing session data
+                localStorage.setItem('token', response.token);
+                localStorage.setItem('user', JSON.stringify(response.user));
+                this.userSubject.next(response.user);
             })
         );
     }

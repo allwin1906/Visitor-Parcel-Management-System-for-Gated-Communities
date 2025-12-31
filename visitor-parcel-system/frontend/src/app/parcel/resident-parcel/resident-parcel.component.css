@@ -87,9 +87,9 @@ h2 {
 .empty-state {
     text-align: center;
     padding: 4rem;
-    background: white;
+    background: var(--bg-surface);
     border-radius: var(--radius-lg);
-    border: 2px dashed #e2e8f0;
+    border: 2px dashed var(--border-color);
 }
 
 .empty-state mat-icon {

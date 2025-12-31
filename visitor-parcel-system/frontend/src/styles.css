@@ -78,13 +78,37 @@
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
 
+  /* Re-map colors for Dark Mode (Lighter variants for text) */
   --primary-50: rgba(99, 102, 241, 0.15);
   --primary-100: rgba(99, 102, 241, 0.25);
+  --primary-500: #818cf8;
+  /* Light Indigo */
+  --primary-600: #6366f1;
+  --primary-700: #a5b4fc;
+  /* Very Light Indigo for text */
 
   --success-50: rgba(16, 185, 129, 0.1);
+  --success-500: #34d399;
+  --success-700: #6ee7b7;
+  /* Light Emerald */
+
   --warning-50: rgba(245, 158, 11, 0.1);
+  --warning-500: #fbbf24;
+  --warning-700: #fcd34d;
+  /* Light Amber */
+
   --error-50: rgba(239, 68, 68, 0.1);
+  --error-500: #f87171;
+  --error-700: #fca5a5;
+  /* Light Red */
+
   --info-50: rgba(59, 130, 246, 0.1);
+  --info-500: #60a5fa;
+  --info-700: #93c5fd;
+  /* Light Blue */
+
+  --accent-500: #f472b6;
+  --accent-600: #ec4899;
 }
 
 body {
@@ -276,47 +300,47 @@ p {
 .status-waiting {
   background-color: var(--warning-50);
   color: var(--warning-700);
-  border: 1px solid #fcd34d;
+  border: 1px solid var(--warning-500);
   animation: pulse 2s infinite;
 }
 
 .status-approved {
   background-color: var(--success-50);
   color: var(--success-700);
-  border: 1px solid #6ee7b7;
+  border: 1px solid var(--success-500);
   animation: popIn 0.3s ease-out;
 }
 
 .status-rejected {
   background-color: var(--error-50);
   color: var(--error-700);
-  border: 1px solid #fca5a5;
+  border: 1px solid var(--error-500);
   animation: slideIn 0.3s ease-out;
 }
 
 .status-collected {
   background-color: var(--info-50);
   color: var(--info-700);
-  border: 1px solid #7dd3fc;
+  border: 1px solid var(--info-500);
   animation: popIn 0.3s ease-out;
 }
 
 .status-received {
   background-color: var(--info-50);
   color: var(--info-700);
-  border: 1px solid #7dd3fc;
+  border: 1px solid var(--info-500);
 }
 
 .status-entered {
   background-color: var(--primary-50);
   color: var(--primary-700);
-  border: 1px solid #a5b4fc;
+  border: 1px solid var(--primary-500);
 }
 
 .status-exited {
-  background-color: #f3f4f6;
-  color: #4b5563;
-  border: 1px solid #d1d5db;
+  background-color: var(--bg-body);
+  color: var(--text-secondary);
+  border: 1px solid var(--text-light);
 }
 
 /* --- Empty States --- */

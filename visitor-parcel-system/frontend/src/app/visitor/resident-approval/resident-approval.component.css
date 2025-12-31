@@ -26,9 +26,9 @@
 .empty-state {
     text-align: center;
     padding: 4rem 2rem;
-    background: white;
+    background: var(--bg-surface);
     border-radius: var(--radius-lg);
-    border: 2px dashed #e2e8f0;
+    border: 2px dashed var(--border-color);
     color: var(--text-secondary);
 }
 
@@ -119,8 +119,8 @@
     justify-content: center;
     padding: 1rem;
     gap: 0.75rem;
-    background: #f8fafc;
-    border-left: 1px solid rgba(0, 0, 0, 0.05);
+    background: var(--bg-body);
+    border-left: 1px solid var(--border-light);
 }
 
 .action-btn {
@@ -143,7 +143,7 @@
 
 .reject-btn {
     color: var(--error-500) !important;
-    border-color: var(--error-200) !important;
+    border-color: var(--error-500) !important;
 }
 
 .reject-btn:hover {
@@ -158,7 +158,7 @@
     .card-actions-wrapper {
         flex-direction: row;
         border-left: none;
-        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        border-top: 1px solid var(--border-light);
     }
 
     .card-status-strip {

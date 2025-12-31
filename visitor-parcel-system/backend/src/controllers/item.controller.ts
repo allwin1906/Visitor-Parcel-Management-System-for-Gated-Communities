@@ -7,28 +7,21 @@ import { notifyResident } from "../services/socket.service";
 const itemRepository = AppDataSource.getRepository(Item);
 
 // Helper to create item with specific type
-// Helper to create item with specific type
+// function to handle logic for both visitors and parcels to avoid code duplication
 const createItemInternal = async (req: AuthRequest, res: Response, type: ItemType) => {
     const { residentId, name, purpose, media, vehicleDetails, phone, courierName, trackingId } = req.body;
     const securityGuardId = req.user!.userId;
 
-    // Validate required fields based on type
+    // validating user input based on item type
     if (!residentId) {
         return res.status(400).json({ message: "Missing required field: residentId" });
     }
 
     if (type === ItemType.VISITOR) {
         if (!name) return res.status(400).json({ message: "Visitor Name is required" });
-        if (!phone) return res.status(400).json({ message: "Visitor Phone is required" }); // New validation
+        if (!phone) return res.status(400).json({ message: "Visitor Phone is required" }); // required for contact
         if (!purpose) return res.status(400).json({ message: "Purpose (description) is required" });
     } else if (type === ItemType.PARCEL) {
-        // For Parcels, "name" was overloaded, but usually we say "Courier" + "Tracking"
-        // If frontend sends courierName, we map it.
-        // Frontend sends: courierName, trackingId.
-        // Does frontend send 'name' for parcel? logic in parcel-log.component.ts might send something.
-        // Let's check parcel-log.ts or just handle what we have.
-        // The entity has 'name'. We can map courierName to name if name is missing, or use courierName column.
-
         if (!courierName) return res.status(400).json({ message: "Courier Name is required" });
     }
 
@@ -36,17 +29,17 @@ const createItemInternal = async (req: AuthRequest, res: Response, type: ItemTyp
     item.resident_id = residentId;
     item.security_guard_id = securityGuardId;
     item.type = type;
-    item.name = name || courierName; // Fallback for Parcel if name not sent
-    item.purpose = purpose; // Purpose
+    item.name = name || courierName; // if parcel, use courier name as main display name
+    item.purpose = purpose;
     item.media = media;
     item.vehicle_details = vehicleDetails;
 
-    // New fields
+    // storing extra details
     item.phone = phone;
     item.courier_name = courierName;
     item.tracking_id = trackingId;
 
-    // Set initial status
+    // set default status for new entries
     if (type === ItemType.VISITOR) {
         item.status = ItemStatus.WAITING;
     } else if (type === ItemType.PARCEL) {
@@ -55,7 +48,7 @@ const createItemInternal = async (req: AuthRequest, res: Response, type: ItemTyp
 
     await itemRepository.save(item);
 
-    // Notify resident
+    // alert the resident immediately
     notifyResident(residentId, "NEW_ITEM", `New ${type} recorded: ${name}`, item);
 
     return res.status(201).json(item);
@@ -84,23 +77,23 @@ export const updateStatus = async (req: AuthRequest, res: Response) => {
     const item = await itemRepository.findOneBy({ id: Number(id) });
     if (!item) return res.status(404).json({ message: "Item not found" });
 
-    // Validate state transitions
+    // logic to ensure status flows in correct order
     const current = item.status;
     let allowed = false;
 
     if (item.type === ItemType.VISITOR) {
-        // Visitor: Waiting -> Approved/Rejected -> Entered -> Exited
+        // flow: waiting -> approved/rejected -> entered -> exited
         if (current === ItemStatus.WAITING && (status === ItemStatus.APPROVED || status === ItemStatus.REJECTED)) allowed = true;
         else if (current === ItemStatus.APPROVED && status === ItemStatus.ENTERED) allowed = true;
         else if (current === ItemStatus.ENTERED && status === ItemStatus.EXITED) allowed = true;
     } else if (item.type === ItemType.PARCEL) {
-        // Parcel: Received -> Acknowledged -> Collected
+        // flow: received -> acknowledged -> collected
         if (current === ItemStatus.RECEIVED && status === ItemStatus.ACKNOWLEDGED) allowed = true;
         else if (current === ItemStatus.ACKNOWLEDGED && status === ItemStatus.COLLECTED) allowed = true;
         else if (current === ItemStatus.RECEIVED && status === ItemStatus.COLLECTED) allowed = true;
     }
 
-    // Admin can force any status
+    // admin override for fixing mistakes
     if (req.user!.role === 'Admin') allowed = true;
 
     if (!allowed) {
@@ -110,11 +103,7 @@ export const updateStatus = async (req: AuthRequest, res: Response) => {
     item.status = status;
     await itemRepository.save(item);
 
-    // Notify relevant parties
-    // If Security updates, notify resident. 
-    // If Resident updates (Acknowledged, Approved/Rejected), notify Security (optional, or just log)?
-    // For now notify resident on updates except if they did it themselves (not handled here, socket service usually handles "don't send to sender" or we just send to specific user)
-    // Actually we just notify resident always for simplicity, frontend ignores if needed.
+    // notify resident about status change
     notifyResident(item.resident_id, "STATUS_UPDATE", `Item ${item.id} status: ${status}`, item);
 
     return res.json(item);
@@ -125,13 +114,14 @@ export const getItems = async (req: AuthRequest, res: Response) => {
     const userId = req.user!.userId;
     const role = req.user!.role;
 
-    // Residents can only see their own
+    // security check: residents can't see others data
     if (role === 'Resident' && Number(residentId) !== userId && residentId) {
-        return res.status(403).json({ message: "Cannot view other residents' items" }); // Or just ignore param and use userId
+        return res.status(403).json({ message: "Cannot view other residents' items" });
     }
 
-    // If resident, filter by their ID
-    const query = itemRepository.createQueryBuilder("item")
+    // preparing query to fetch items with relations
+    const repo = itemRepository; // alias for brevity
+    const query = repo.createQueryBuilder("item")
         .leftJoinAndSelect("item.resident", "resident")
         .leftJoinAndSelect("item.security_guard", "security");
 

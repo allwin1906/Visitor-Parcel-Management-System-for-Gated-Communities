@@ -1,60 +1,70 @@
-# 🏙️ Visitor & Parcel Management System
+# Visitor and Parcel Management System
 
-This directory contains the core source code for the **Visitor & Parcel Management System**.
+## Project Overview
+This project is a web-based application designed to manage visitors and parcels for gated communities. The system replaces traditional manual entry logs with a digital solution, enhancing security and convenience for residents and security guards. It allows security guards to log entries and residents to approve or reject visitors in real-time.
 
-## 🚀 Quick Start (Local Development)
+## Objectives
+- To digitize the manual entry/exit logging process.
+- To provide a secure and efficient way to handle parcel deliveries.
+- To ensure only authorized visitors are allowed entry.
+- To provide real-time updates to residents using WebSockets.
 
-### **Standard Launcher (Windows)**
-Run the **`start-local.bat`** file from this directory. It will:
-1. Initialize the Backend server.
-2. Initialize the Frontend application.
-3. Automatically install all dependencies if missing.
+## Technology Stack
+- **Frontend:** Angular 16, HTML5, CSS3
+- **Backend:** Node.js, Express.js
+- **Database:** MySQL
+- **Authentication:** JWT (JSON Web Tokens)
+- **Real-time Communication:** Socket.io
 
-### **Manual Start**
-If you prefer manual control:
+## Modules
+1.  **Admin Module:** For managing users (Residents, Security Guards) and viewing dashboard statistics.
+2.  **Resident Module:** For viewing visitor logs, approving/rejecting entry requests, and tracking parcels.
+3.  **Security Module:** For logging new visitors and parcels, and updating their status upon exit/collection.
 
-1. **Backend Development Server**
+## How to Run the Project
+
+### Prerequisites
+- Node.js (v14 or higher) installed.
+- MySQL Server installed and running.
+
+### 1. Database Setup
+Ensure your MySQL server is running. The application uses TypeORM with `synchronize: true`, so the tables will be created automatically upon connection.
+Update the `.env` file in the `backend` folder with your database credentials.
+
+### 2. Backend Setup
+1. Open a terminal and navigate to the `backend` folder.
+2. Install dependencies:
    ```bash
-   cd backend
    npm install
+   ```
+3. Start the server:
+   ```bash
    npm run dev
    ```
-   *Runs on http://localhost:4000*
+   Server runs on: `http://localhost:4000`
 
-2. **Frontend Application**
+### 3. Frontend Setup
+1. Open a new terminal and navigate to the `frontend` folder.
+2. Install dependencies:
    ```bash
-   cd frontend
    npm install
+   ```
+3. Start the application:
+   ```bash
    npm start
    ```
-   *Runs on http://localhost:4200*
+   Application runs on: `http://localhost:4200`
 
----
+## Default Login Credentials
+Use the following credentials to test different user roles:
 
-## 🔑 Demo Access
 | Role | Email | Password |
-| :--- | :--- | :--- |
+|---|---|---|
 | **Admin** | `admin@example.com` | `admin123` |
-| **Security Guard** | `security@example.com` | `security123` |
+| **Security** | `security@example.com` | `security123` |
 | **Resident** | `resident@example.com` | `resident123` |
 
----
-
-## 🏗️ Project Structure
-- **/frontend**: Angular application (UI/UX, Dashboards, State management).
-- **/backend**: Express/Node.js API (Authentication, WebSocket for real-time, Database logic).
-- **/db**: Database initialization and configurations.
-
-## ⚙️ Configuration
-Environment variables can be found in `.env.example` within the respective subdirectories. Ensure you setup your local MySQL credentials in the backend `.env` file if not using the default setup.
-
----
-
-## 📅 Features
-- ✅ Role-Based Dashboards
-- ✅ Real-time Notifications (Socket.IO)
-- ✅ Modern Glassmorphism UI
-- ✅ Visitor Approval Workflow
-- ✅ Parcel Tracking System
-
-*Refer to the [Root README](../README.md) for full project documentation and usage flow.*
+## Future Enhancements
+- Mobile app integration for residents.
+- QR code based entry for frequent visitors.
+- Email notifications for parcel arrival.
